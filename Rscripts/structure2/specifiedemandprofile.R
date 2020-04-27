@@ -35,11 +35,19 @@ specifieddemandprofile <- cbind(chc, num) %>% as_tibble()
 
 # separate column
 specifieddemandprofile <- separate(specifieddemandprofile, col = "technology", into = c("country", "fuel"), sep = 2)
-help("pivot_longer")
 
-# pivot to wider
+# pivot to longer
 specifieddemandprofile <- pivot_longer(specifieddemandprofile, cols = c(4:ncol(specifieddemandprofile)), names_to = "year", values_to = "value")
+yearsplit <- pivot_longer(yearsplit, cols = c(2:ncol(yearsplit)), names_to = "year", values_to = "value")
+
+# separate season-bracket
+specifieddemandprofile <- specifieddemandprofile %>% separate(yearsplit, into = c("season", "bracket"), sep = 3) %>% 
+  # arrange column
+  select(country, fuel, year , season, bracket, value)
+
+yearsplit <- yearsplit %>% separate(split, into = c("season", "bracket"), sep = 3)
 # write CSV----
 # write.csv(specifieddemandprofile,
-#          "C:/Users/Utente/Desktop/gamsathome/data/params_gams/specifieddemandprofile.csv")
-
+#          "C:/Users/Utente/Desktop/gamsathome/data/params_gams/specifieddemandprofile.csv", row.names = FALSE)
+# write.csv(yearsplit,
+#           "C:/Users/Utente/Desktop/gamsathome/data/params_gams/yearsplit.csv", row.names = FALSE)
