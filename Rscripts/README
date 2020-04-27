@@ -3,6 +3,7 @@ this folder contains the R scripts used for the TELEWORKING project
 ###### 1) EXTRACT DATA from OSEMBE model #########
 We identified 4 different types of structure in the Data. Each Structure has been trated different.
 The Osembe model has a different structure, so we adapted those data in order to obtain the input Parameters "Like in Utopia Data".
+
 ##STRUCTURE 1##
 Non-timeslice dependent parameter. 
 They have first been disaggregated, according to the OSEMBE legend, and then they have been visualized in the Shiny Application.
@@ -14,6 +15,7 @@ that rule.
 "dataexploration.R" script.
 1.2 REAGGREGATION into FUEL - TECHNOLOGY
 "dataaggregation.R" script.
+
 ##STRUCTURE2##
 timeslice dependent parameters.
 After common evaluation of the problem, we decided to maintain the Osembe timeslice strategy: 5 season, 3 day-brackets.
@@ -21,7 +23,7 @@ After common evaluation of the problem, we decided to maintain the Osembe timesl
 "specifieddemandprofile.R" script
 2.capacityfactor
 "capacityfactor.R" script
-TODOS:"yearsplit" must be loaded.
+
 ##STRUCTURE3##
 Similar t structure1, just more sh---y
 str3.R script
@@ -36,6 +38,4 @@ it's in the "userfunctions.R" script, the function is "fromOSEtoGAMS", which bas
 two vector that sums to 1, so that every component of the input is totally used, never under/over-used.
 recap
 TODOS:
-1) load yearsplit.
-2) check structure 3 (check if we need to add another set in the model)
-3) ask for Structure 4
+-remember there also Structure 4
