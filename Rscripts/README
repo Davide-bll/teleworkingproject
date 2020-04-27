@@ -23,8 +23,7 @@ After common evaluation of the problem, we decided to maintain the Osembe timesl
 "capacityfactor.R" script
 TODOS:"yearsplit" must be loaded.
 ##STRUCTURE3##
-Every values assigned for tehcnology and emission. 
-Have we converted this right? 
+Similar t structure1, just more sh---y
 str3.R script
 ##STRUCTURE4##
 writed manually in GAMS.
