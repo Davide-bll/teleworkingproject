@@ -39,3 +39,4 @@ two vector that sums to 1, so that every component of the input is totally used,
 recap
 TODOS:
 -remember there also Structure 4
+-specify the Default values directly in GAMS!
