@@ -1,2 +1,2 @@
-# teleworkingproj
-R and Gams script of teleworking proj
+# Teleworking Impact project
+R and Gams script of teleworking project
