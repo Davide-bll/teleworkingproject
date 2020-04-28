@@ -10,6 +10,26 @@ require(stringr)
 # set path data
 path <- "C:/Users/Utente/Desktop/gamsathome/data/params_gams/"
 
+# functions ----
+# fix names
+rename_commodity <- function(x, old = "commodity", new = "fuel") {
+  if(old %in% names(x)) {
+    
+    x <- x %>% rename(!!sym(new) := old)
+  }
+  x
+} 
+
+# change HO with HY
+.change_code <-function(x, old = "HO", new = "HY") {
+  if(x == old) x <- new
+  x
+}
+
+change_code <- function(x, old = "HO", new = "HY") {
+  map_chr(x, .change_code, old = old, new = new)
+}
+
 # load data
 paramlist <- list.files(path = path, pattern = ".csv")
 
@@ -19,14 +39,9 @@ list_param <- map(paramlist, ~read.csv(file = paste(path, ., sep = "/"),
                     as_tibble) %>% 
   setNames(nm = str_remove(paramlist, ".csv")) 
 
-# fix names
-rename_commodity <- function(x, old = "commodity", new = "fuel") {
-  if(old %in% names(x)) {
-    
-    x <- x %>% rename(!!sym(new) := old)
-  }
-  x
-} 
+
+# rename commodity in fuel
+list_param <- map(list_param, rename_commodity)
 
 # this could have been avoided using row.names = FALSE in write.csv
 list_param <- list_param %>% map(~.[which(!(str_detect(names(.), "X")))])
@@ -44,6 +59,10 @@ map(list_param, ~select(., -value) %>%
       group_by_all(.) %>% count() %>% filter(n>1)) %>% 
   map_dbl(nrow) %>% sum()
 
+# subset tibbls containing fuel, and change col
+predicates <- map_lgl(list_param, function(x) "fuel" %in% names(x))
+list_param[predicates] <- map(list_param[predicates], ~mutate(., fuel = change_code(fuel)))
+
 # write gdx
-# write.gdx("C:/Users/Utente/Desktop/gamsathome/gamsscript/params", 
+# write.gdx("C:/Users/Utente/Desktop/gamsathome/gamsscript/params",
 #           params = list_param)
