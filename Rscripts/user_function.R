@@ -17,11 +17,22 @@ read_osemosys_2 <- function(path, header = TRUE, pattern = "X", replacement = ""
   x
   
 }
+
 convert_tb <- function(x, into = c("country", "commodity", "technology", "energy_level", "age", "size"), 
-                       sep = c(2,4,6,7,8), col = "code") {
+                       sep = c(2,4,6,7,8), col = "code", from = NULL) {
   
+  # separate col
   x <- separate(x, col = col, into = into, sep = sep)
-  pivot_longer(x, cols = c((length(into) + 1): dim(x)[[2]]), names_to = "year", values_to = "value")
+  
+  # re-arrange cols
+  chr <- select_if(x, ~(!is.numeric(.)))
+  num <- select_if(x, is.numeric)
+  x <- cbind(chr, num) %>% as_tibble
+  
+  if(is.null(from)) {
+    from <- dim(chr)[[2]] + 1}
+  
+  pivot_longer(x, cols = c((from): dim(x)[[2]]), names_to = "year", values_to = "value")
 }
 
 # detect the first TRUE-- very specific for this data
@@ -62,6 +73,7 @@ find_tech <- function(x, code = "IT", col = 1) {
 remove_fake <- function(x, code = "IT") {
   col <- names(x)[[1]]
   x <- filter(x, !str_detect(x[[col]], code)) 
+  x
 }
 
 # add col
@@ -73,9 +85,25 @@ add_col <- function(x, old, new) {
 # structure 3 strategy
 convert_struct3 <- function(x) {
   techs <- find_tech(x)
-  add_col(remove_fake(x), old = techs[[1]], new = techs)
+  x <- add_col(remove_fake(x), old = techs[[1]], new = techs)
+  
+  # deal with different modes: this works only if the first observation is mode 1, and mode 2 
+  mode <- x %>% select(technology) %>% 
+    mutate(mode = 1) %>% 
+    group_by(technology) %>% 
+    mutate(mode = as.character(cumsum(mode))) %>% 
+    ungroup
+  
+  x %>% left_join(mode, by = "technology")
+  
 }
 
+# arrange cols
+arrange_cols <- function(x) {
+  
+  cbind(select_if(x, ~(!is.numeric(.))), select_if(x, is.numeric)) %>% 
+    as_tibble()
+}
 
 find_mapping <- function(input, output) {
   nrow <- length(output)
