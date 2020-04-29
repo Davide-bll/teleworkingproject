@@ -40,9 +40,10 @@ capacityfactor <- capacityfactor %>%
            into = c("country", "technology", "fuel", "altro"), 
            sep = c(2,4,6))
 # arrange order column
-chc <- capacityfactor %>% select_if(is.character)
-num <- capacityfactor %>% select_if(is.numeric)
-capacityfactor <- cbind(chc, num) %>% as_tibble()
+capacityfactor <- arrange_cols(capacityfactor)
+# chc <- capacityfactor %>% select_if(is.character)
+# num <- capacityfactor %>% select_if(is.numeric)
+# capacityfactor <- cbind(chc, num) %>% as_tibble()
 
 
 # longer version
@@ -55,9 +56,12 @@ capacityfactor <- capacityfactor %>%
   ungroup()
 
 # separate year split
-capacityfactor <- capacityfactor %>% separate("yearsplit" , into = c("season", "bracket"), sep = 3)
+# capacityfactor <- capacityfactor %>% separate("yearsplit" , into = c("season", "bracket"), sep = 3)
+
+# rename yearsplit
+capacityfactor <- capacityfactor %>% rename(timeslice = yearsplit)
 
 # write CSV----
 # write.csv(capacityfactor,
 #            "C:/Users/Utente/Desktop/gamsathome/data/params_gams/capacityfactor.csv")
-
+# 
