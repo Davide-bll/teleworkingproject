@@ -21,7 +21,6 @@ s3names <- list.files(path)
 
 s3list <- map(s3names, ~read_osemosys(paste(path, .x, sep = "/"))) %>% 
   setNames(nm = str_remove(s3names, ".txt"))
-# line 74 78 of variable cost?????
 
 # fix 2060 column
 # convert to standard table from this (very shi--y format)
@@ -40,10 +39,10 @@ actions <- list(mean,
                 )
 
 grps <- list(
-  c("country", "technology", "fuel", "year"),
-  c("country", "technology", "fuel", "year"),
-  c("country", "technology", "fuel", "year"),
-  c("country", "technology", "fuel", "year")
+  c("country", "technology", "fuel", "mode", "year"),
+  c("country", "technology", "fuel", "mode", "year"),
+  c("country", "technology", "fuel", "mode", "year"),
+  c("country", "technology", "fuel", "mode", "year")
 )
 
 # arguments
@@ -54,6 +53,12 @@ args <- list(x   = s3list,
 # s3list
 s3list <- pmap(args, my_group_by)
 
+# add emission in emissionactivityratio
+s3list$EmissionActivityRatio <- s3list$EmissionActivityRatio %>% 
+  mutate(emission = "CO2") %>% 
+  select(country, emission, technology, fuel, mode, year, value)
+
 # # write csv
 # imap(s3list, ~write.csv(.x, 
-#                        paste("C:/Users/Utente/Desktop/gamsathome/data/params_gams/", paste0(.y, ".csv"),  sep = "/")))
+#                         paste("C:/Users/Utente/Desktop/gamsathome/data/params_gams/", paste0(.y, ".csv"),  sep = "/"), 
+#               row.names = FALSE))
