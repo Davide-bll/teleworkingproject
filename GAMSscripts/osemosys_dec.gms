@@ -26,19 +26,19 @@ set TIMESLICE;
 alias (l,TIMESLICE);
 set FUEL;
 alias (f,FUEL);
-* add set??
+* add set??????????????????????????????????????????????????????????
 set EMISSION;
 alias (e,EMISSION);
 set MODE_OF_OPERATION;
 alias (m,MODE_OF_OPERATION);
-set REGION;
-alias (r,REGION,rr);
+set COUNTRY;
+alias (r,COUNTRY,rr);
 set SEASON;
 alias (ls,SEASON,lsls);
 set DAYTYPE;
 alias (ld,DAYTYPE,ldld);
-set DAILYTIMEBRACKET;
-alias (lh,DAILYTIMEBRACKET,lhlh);
+set BRACKET;
+alias (lh,BRACKET,lhlh);
 set STORAGE;
 alias (s,STORAGE);
 
@@ -50,190 +50,190 @@ alias (s,STORAGE);
 * ####### Global #############
 *
 parameter YearSplit(SEASON, BRACKET,YEAR);
-parameter DiscountRate(REGION);
-parameter DaySplit(YEAR,DAILYTIMEBRACKET);
+parameter DiscountRate(COUNTRY);
+parameter DaySplit(YEAR,BRACKET);
 parameter Conversionls(TIMESLICE,SEASON);
 parameter Conversionld(TIMESLICE,DAYTYPE);
-parameter Conversionlh(TIMESLICE,DAILYTIMEBRACKET);
+parameter Conversionlh(TIMESLICE,BRACKET);
 parameter DaysInDayType(YEAR,SEASON,DAYTYPE);
-parameter TradeRoute(REGION,rr,FUEL,YEAR);
-parameter DepreciationMethod(REGION);
+parameter TradeRoute(COUNTRY,rr,FUEL,YEAR);
+parameter DepreciationMethod(COUNTRY);
 *
 * ####### Demands #############
 *we'll need values for technology
-parameter SpecifiedAnnualDemand(REGION,FUEL,YEAR);
-parameter SpecifiedDemandProfile(REGION,FUEL,TIMESLICE,YEAR);
+parameter SpecifiedAnnualDemand(COUNTRY,FUEL,YEAR);
+parameter SpecifiedDemandProfile(COUNTRY,FUEL,TIMESLICE,YEAR);
 * used if the demand does not depend on the timeslice
-parameter AccumulatedAnnualDemand(REGION,FUEL,YEAR);
-*
+parameter AccumulatedAnnualDemand(COUNTRY,FUEL,YEAR);
+
 * ######## Performance #############
 *
-parameter CapacityToActivityUnit(REGION,TECHNOLOGY);
-parameter CapacityFactor(REGION,TECHNOLOGY,TIMESLICE,YEAR);
-parameter AvailabilityFactor(REGION,TECHNOLOGY,YEAR);
-parameter OperationalLife(REGION,TECHNOLOGY);
-parameter ResidualCapacity(REGION,TECHNOLOGY,YEAR);
-parameter InputActivityRatio(REGION,TECHNOLOGY,FUEL,MODE_OF_OPERATION,YEAR);
-parameter OutputActivityRatio(REGION,TECHNOLOGY,FUEL,MODE_OF_OPERATION,YEAR);
+parameter CapacityToActivityUnit(COUNTRY,TECHNOLOGY);
+parameter CapacityFactor(COUNTRY,TECHNOLOGY,TIMESLICE,YEAR);
+parameter AvailabilityFactor(COUNTRY,TECHNOLOGY,YEAR);
+parameter OperationalLife(COUNTRY,TECHNOLOGY);
+parameter ResidualCapacity(COUNTRY,TECHNOLOGY,YEAR);
+parameter InputActivityRatio(COUNTRY,TECHNOLOGY,FUEL,MODE_OF_OPERATION,YEAR);
+parameter OutputActivityRatio(COUNTRY,TECHNOLOGY,FUEL,MODE_OF_OPERATION,YEAR);
 *
 * ######## Technology Costs #############
 *
-parameter CapitalCost(REGION,TECHNOLOGY,YEAR);
-parameter VariableCost(REGION,TECHNOLOGY,MODE_OF_OPERATION,YEAR);
-parameter FixedCost(REGION,TECHNOLOGY,YEAR);
+parameter CapitalCost(COUNTRY,TECHNOLOGY,YEAR);
+parameter VariableCost(COUNTRY,TECHNOLOGY,MODE_OF_OPERATION,YEAR);
+parameter FixedCost(COUNTRY,TECHNOLOGY,YEAR);
 *
 * ######## Storage Parameters #############
 *??? may be 0 ??? 
-parameter TechnologyToStorage(REGION,MODE_OF_OPERATION,TECHNOLOGY,STORAGE);
-parameter TechnologyFromStorage(REGION,MODE_OF_OPERATION,TECHNOLOGY,STORAGE);
-parameter StorageLevelStart(REGION,STORAGE);
-parameter StorageMaxChargeRate(REGION,STORAGE);
-parameter StorageMaxDischargeRate(REGION,STORAGE);
-parameter MinStorageCharge(REGION,STORAGE,YEAR);
-parameter OperationalLifeStorage(REGION,STORAGE);
-parameter CapitalCostStorage(REGION,STORAGE,YEAR);
-parameter ResidualStorageCapacity(REGION,STORAGE,YEAR);
+parameter TechnologyToStorage(COUNTRY,MODE_OF_OPERATION,TECHNOLOGY,STORAGE);
+parameter TechnologyFromStorage(COUNTRY,MODE_OF_OPERATION,TECHNOLOGY,STORAGE);
+parameter StorageLevelStart(COUNTRY,STORAGE);
+parameter StorageMaxChargeRate(COUNTRY,STORAGE);
+parameter StorageMaxDischargeRate(COUNTRY,STORAGE);
+parameter MinStorageCharge(COUNTRY,STORAGE,YEAR);
+parameter OperationalLifeStorage(COUNTRY,STORAGE);
+parameter CapitalCostStorage(COUNTRY,STORAGE,YEAR);
+parameter ResidualStorageCapacity(COUNTRY,STORAGE,YEAR);
 *
 * ######## Capacity Constraints #############
 *
-parameter CapacityOfOneTechnologyUnit(REGION,TECHNOLOGY,YEAR);
-parameter TotalAnnualMaxCapacity(REGION,TECHNOLOGY,YEAR);
-parameter TotalAnnualMinCapacity(REGION,TECHNOLOGY,YEAR);
+parameter CapacityOfOneTechnologyUnit(COUNTRY,TECHNOLOGY,YEAR);
+parameter TotalAnnualMaxCapacity(COUNTRY,TECHNOLOGY,YEAR);
+parameter TotalAnnualMinCapacity(COUNTRY,TECHNOLOGY,YEAR);
 *
 * ######## Investment Constraints #############
 *
-parameter TotalAnnualMaxCapacityInvestment(REGION,TECHNOLOGY,YEAR);
-parameter TotalAnnualMinCapacityInvestment(REGION,TECHNOLOGY,YEAR);
+parameter TotalAnnualMaxCapacityInvestment(COUNTRY,TECHNOLOGY,YEAR);
+parameter TotalAnnualMinCapacityInvestment(COUNTRY,TECHNOLOGY,YEAR);
 *
 * ######## Activity Constraints #############
 *
-parameter TotalTechnologyAnnualActivityUpperLimit(REGION,TECHNOLOGY,YEAR);
-parameter TotalTechnologyAnnualActivityLowerLimit(REGION,TECHNOLOGY,YEAR);
-parameter TotalTechnologyModelPeriodActivityUpperLimit(REGION,TECHNOLOGY);
-parameter TotalTechnologyModelPeriodActivityLowerLimit(REGION,TECHNOLOGY);
+parameter TotalTechnologyAnnualActivityUpperLimit(COUNTRY,TECHNOLOGY,YEAR);
+parameter TotalTechnologyAnnualActivityLowerLimit(COUNTRY,TECHNOLOGY,YEAR);
+parameter TotalTechnologyModelPeriodActivityUpperLimit(COUNTRY,TECHNOLOGY);
+parameter TotalTechnologyModelPeriodActivityLowerLimit(COUNTRY,TECHNOLOGY);
 *
 * ######## Reserve Margin ############
 *
-parameter ReserveMarginTagTechnology(REGION,TECHNOLOGY,YEAR);
-parameter ReserveMarginTagFuel(REGION,FUEL,YEAR);
-parameter ReserveMargin(REGION,YEAR);
+parameter ReserveMarginTagTechnology(COUNTRY,TECHNOLOGY,YEAR);
+parameter ReserveMarginTagFuel(COUNTRY,FUEL,YEAR);
+parameter ReserveMargin(COUNTRY,YEAR);
 *
 * ######## RE Generation Target ############
 *
-parameter RETagTechnology(REGION,TECHNOLOGY,YEAR);
-parameter RETagFuel(REGION,FUEL,YEAR);
-parameter REMinProductionTarget(REGION,YEAR);
+parameter RETagTechnology(COUNTRY,TECHNOLOGY,YEAR);
+parameter RETagFuel(COUNTRY,FUEL,YEAR);
+parameter REMinProductionTarget(COUNTRY,YEAR);
 *
 * ######### Emissions & Penalties #############
 *check what we have
-parameter EmissionActivityRatio(REGION,TECHNOLOGY,EMISSION,MODE_OF_OPERATION,YEAR);
-parameter EmissionsPenalty(REGION,EMISSION,YEAR);
-parameter AnnualExogenousEmission(REGION,EMISSION,YEAR);
-parameter AnnualEmissionLimit(REGION,EMISSION,YEAR);
-parameter ModelPeriodExogenousEmission(REGION,EMISSION);
-parameter ModelPeriodEmissionLimit(REGION,EMISSION);
+parameter EmissionActivityRatio(COUNTRY,TECHNOLOGY,EMISSION,MODE_OF_OPERATION,YEAR);
+parameter EmissionsPenalty(COUNTRY,EMISSION,YEAR);
+parameter AnnualExogenousEmission(COUNTRY,EMISSION,YEAR);
+parameter AnnualEmissionLimit(COUNTRY,EMISSION,YEAR);
+*emission unit of measurement!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! EMISSION O FUEL? probably (COUNTRY,EMISSION,fuel,YEAR);
+parameter ModelPeriodExogenousEmission(COUNTRY,EMISSION);
+parameter ModelPeriodEmissionLimit(COUNTRY,EMISSION);
 
 *
+
 * #####################
 * # Model Variables #
 * #####################
 *
 * ############### Demands ############
 *
-positive variable RateOfDemand(REGION,TIMESLICE,FUEL,YEAR);
-positive variable Demand(REGION,TIMESLICE,FUEL,YEAR);
+positive variable RateOfDemand(COUNTRY,TIMESLICE,FUEL,YEAR);
+positive variable Demand(COUNTRY,TIMESLICE,FUEL,YEAR);
 *
 * ############### Storage ###########
 *
-free variable  RateOfStorageCharge(REGION,STORAGE,SEASON,DAYTYPE,DAILYTIMEBRACKET,YEAR);
-free variable  RateOfStorageDischarge(REGION,STORAGE,SEASON,DAYTYPE,DAILYTIMEBRACKET,YEAR);
-free variable  NetChargeWithinYear(REGION,STORAGE,SEASON,DAYTYPE,DAILYTIMEBRACKET,YEAR);
-free variable  NetChargeWithinDay(REGION,STORAGE,SEASON,DAYTYPE,DAILYTIMEBRACKET,YEAR);
-positive variable StorageLevelYearStart(REGION,STORAGE,YEAR);
-positive variable StorageLevelYearFinish(REGION,STORAGE,YEAR);
-positive variable StorageLevelSeasonStart(REGION,STORAGE,SEASON,YEAR);
-positive variable StorageLevelDayTypeStart(REGION,STORAGE,SEASON,DAYTYPE,YEAR);
-positive variable StorageLevelDayTypeFinish(REGION,STORAGE,SEASON,DAYTYPE,YEAR);
-positive variable StorageLowerLimit(REGION,STORAGE,YEAR);
-positive variable StorageUpperLimit(REGION,STORAGE,YEAR);
-positive variable AccumulatedNewStorageCapacity(REGION,STORAGE,YEAR);
-positive variable NewStorageCapacity(REGION,STORAGE,YEAR);
-positive variable CapitalInvestmentStorage(REGION,STORAGE,YEAR);
-positive variable DiscountedCapitalInvestmentStorage(REGION,STORAGE,YEAR);
-positive variable SalvageValueStorage(REGION,STORAGE,YEAR);
-positive variable DiscountedSalvageValueStorage(REGION,STORAGE,YEAR);
-positive variable TotalDiscountedStorageCost(REGION,STORAGE,YEAR);
+free variable  RateOfStorageCharge(COUNTRY,STORAGE,SEASON,DAYTYPE,BRACKET,YEAR);
+free variable  RateOfStorageDischarge(COUNTRY,STORAGE,SEASON,DAYTYPE,BRACKET,YEAR);
+free variable  NetChargeWithinYear(COUNTRY,STORAGE,SEASON,DAYTYPE,BRACKET,YEAR);
+free variable  NetChargeWithinDay(COUNTRY,STORAGE,SEASON,DAYTYPE,BRACKET,YEAR);
+positive variable StorageLevelYearStart(COUNTRY,STORAGE,YEAR);
+positive variable StorageLevelYearFinish(COUNTRY,STORAGE,YEAR);
+positive variable StorageLevelSeasonStart(COUNTRY,STORAGE,SEASON,YEAR);
+positive variable StorageLevelDayTypeStart(COUNTRY,STORAGE,SEASON,DAYTYPE,YEAR);
+positive variable StorageLevelDayTypeFinish(COUNTRY,STORAGE,SEASON,DAYTYPE,YEAR);
+positive variable StorageLowerLimit(COUNTRY,STORAGE,YEAR);
+positive variable StorageUpperLimit(COUNTRY,STORAGE,YEAR);
+positive variable AccumulatedNewStorageCapacity(COUNTRY,STORAGE,YEAR);
+positive variable NewStorageCapacity(COUNTRY,STORAGE,YEAR);
+positive variable CapitalInvestmentStorage(COUNTRY,STORAGE,YEAR);
+positive variable DiscountedCapitalInvestmentStorage(COUNTRY,STORAGE,YEAR);
+positive variable SalvageValueStorage(COUNTRY,STORAGE,YEAR);
+positive variable DiscountedSalvageValueStorage(COUNTRY,STORAGE,YEAR);
+positive variable TotalDiscountedStorageCost(COUNTRY,STORAGE,YEAR);
 *
 * ############### Capacity Variables ############
 *
-integer variable NumberOfNewTechnologyUnits(REGION,TECHNOLOGY,YEAR);
-positive variable NewCapacity(REGION,TECHNOLOGY,YEAR);
-positive variable AccumulatedNewCapacity(REGION,TECHNOLOGY,YEAR);
-positive variable TotalCapacityAnnual(REGION,TECHNOLOGY,YEAR);
+integer variable NumberOfNewTechnologyUnits(COUNTRY,TECHNOLOGY,YEAR);
+positive variable NewCapacity(COUNTRY,TECHNOLOGY,YEAR);
+positive variable AccumulatedNewCapacity(COUNTRY,TECHNOLOGY,YEAR);
+positive variable TotalCapacityAnnual(COUNTRY,TECHNOLOGY,YEAR);
 *
 * ############### Activity Variables #############
 *
-positive variable RateOfActivity(REGION,TIMESLICE,TECHNOLOGY,MODE_OF_OPERATION,YEAR);
-positive variable RateOfTotalActivity(REGION,TIMESLICE,TECHNOLOGY,YEAR);
-positive variable TotalTechnologyAnnualActivity(REGION,TECHNOLOGY,YEAR);
-positive variable TotalAnnualTechnologyActivityByMode(REGION,TECHNOLOGY,MODE_OF_OPERATION,YEAR);
-positive variable RateOfProductionByTechnologyByMode(REGION,TIMESLICE,TECHNOLOGY,MODE_OF_OPERATION,FUEL,YEAR);
-positive variable RateOfProductionByTechnology(REGION,TIMESLICE,TECHNOLOGY,FUEL,YEAR);
-positive variable ProductionByTechnology(REGION,TIMESLICE,TECHNOLOGY,FUEL,YEAR);
-positive variable ProductionByTechnologyAnnual(REGION,TECHNOLOGY,FUEL,YEAR);
-positive variable RateOfProduction(REGION,TIMESLICE,FUEL,YEAR);
-positive variable Production(REGION,TIMESLICE,FUEL,YEAR);
-positive variable RateOfUseByTechnologyByMode(REGION,TIMESLICE,TECHNOLOGY,MODE_OF_OPERATION,FUEL,YEAR);
-positive variable RateOfUseByTechnology(REGION,TIMESLICE,TECHNOLOGY,FUEL,YEAR);
-positive variable UseByTechnologyAnnual(REGION,TECHNOLOGY,FUEL,YEAR);
-positive variable RateOfUse(REGION,TIMESLICE,FUEL,YEAR);
-positive variable UseByTechnology(REGION,TIMESLICE,TECHNOLOGY,FUEL,YEAR);
-positive variable Use(REGION,TIMESLICE,FUEL,YEAR);
-positive variable Trade(REGION,rr,TIMESLICE,FUEL,YEAR);
-positive variable TradeAnnual(REGION,rr,FUEL,YEAR);
+positive variable RateOfActivity(COUNTRY,TIMESLICE,TECHNOLOGY,MODE_OF_OPERATION,YEAR);
+positive variable RateOfTotalActivity(COUNTRY,TIMESLICE,TECHNOLOGY,YEAR);
+positive variable TotalTechnologyAnnualActivity(COUNTRY,TECHNOLOGY,YEAR);
+positive variable TotalAnnualTechnologyActivityByMode(COUNTRY,TECHNOLOGY,MODE_OF_OPERATION,YEAR);
+positive variable RateOfProductionByTechnologyByMode(COUNTRY,TIMESLICE,TECHNOLOGY,MODE_OF_OPERATION,FUEL,YEAR);
+positive variable RateOfProductionByTechnology(COUNTRY,TIMESLICE,TECHNOLOGY,FUEL,YEAR);
+positive variable ProductionByTechnology(COUNTRY,TIMESLICE,TECHNOLOGY,FUEL,YEAR);
+positive variable ProductionByTechnologyAnnual(COUNTRY,TECHNOLOGY,FUEL,YEAR);
+positive variable RateOfProduction(COUNTRY,TIMESLICE,FUEL,YEAR);
+positive variable Production(COUNTRY,TIMESLICE,FUEL,YEAR);
+positive variable RateOfUseByTechnologyByMode(COUNTRY,TIMESLICE,TECHNOLOGY,MODE_OF_OPERATION,FUEL,YEAR);
+positive variable RateOfUseByTechnology(COUNTRY,TIMESLICE,TECHNOLOGY,FUEL,YEAR);
+positive variable UseByTechnologyAnnual(COUNTRY,TECHNOLOGY,FUEL,YEAR);
+positive variable RateOfUse(COUNTRY,TIMESLICE,FUEL,YEAR);
+positive variable UseByTechnology(COUNTRY,TIMESLICE,TECHNOLOGY,FUEL,YEAR);
+positive variable Use(COUNTRY,TIMESLICE,FUEL,YEAR);
+positive variable Trade(COUNTRY,rr,TIMESLICE,FUEL,YEAR);
+positive variable TradeAnnual(COUNTRY,rr,FUEL,YEAR);
 *
-positive variable ProductionAnnual(REGION,FUEL,YEAR);
-positive variable UseAnnual(REGION,FUEL,YEAR);
+positive variable ProductionAnnual(COUNTRY,FUEL,YEAR);
+positive variable UseAnnual(COUNTRY,FUEL,YEAR);
 *
 * ############### Costing Variables #############
 *
-positive variable CapitalInvestment(REGION,TECHNOLOGY,YEAR);
-positive variable DiscountedCapitalInvestment(REGION,TECHNOLOGY,YEAR);
+positive variable CapitalInvestment(COUNTRY,TECHNOLOGY,YEAR);
+positive variable DiscountedCapitalInvestment(COUNTRY,TECHNOLOGY,YEAR);
 *
-positive variable SalvageValue(REGION,TECHNOLOGY,YEAR);
-positive variable DiscountedSalvageValue(REGION,TECHNOLOGY,YEAR);
-positive variable OperatingCost(REGION,TECHNOLOGY,YEAR);
-positive variable DiscountedOperatingCost(REGION,TECHNOLOGY,YEAR);
+positive variable SalvageValue(COUNTRY,TECHNOLOGY,YEAR);
+positive variable DiscountedSalvageValue(COUNTRY,TECHNOLOGY,YEAR);
+positive variable OperatingCost(COUNTRY,TECHNOLOGY,YEAR);
+positive variable DiscountedOperatingCost(COUNTRY,TECHNOLOGY,YEAR);
 *
-positive variable AnnualVariableOperatingCost(REGION,TECHNOLOGY,YEAR);
-positive variable AnnualFixedOperatingCost(REGION,TECHNOLOGY,YEAR);
-positive variable VariableOperatingCost(REGION,TIMESLICE,TECHNOLOGY,YEAR);
+positive variable AnnualVariableOperatingCost(COUNTRY,TECHNOLOGY,YEAR);
+positive variable AnnualFixedOperatingCost(COUNTRY,TECHNOLOGY,YEAR);
+positive variable VariableOperatingCost(COUNTRY,TIMESLICE,TECHNOLOGY,YEAR);
 *
-positive variable TotalDiscountedCostByTechnology(REGION,TECHNOLOGY,YEAR);
-positive variable TotalDiscountedCost(REGION,YEAR);
+positive variable TotalDiscountedCostByTechnology(COUNTRY,TECHNOLOGY,YEAR);
+positive variable TotalDiscountedCost(COUNTRY,YEAR);
 *
-positive variable ModelPeriodCostByRegion(REGION);
+positive variable ModelPeriodCostByRegion(COUNTRY);
 *
 * ######## Reserve Margin #############
 *
-positive variable TotalCapacityInReserveMargin(REGION,YEAR);
-positive variable DemandNeedingReserveMargin(REGION,TIMESLICE,YEAR);
+positive variable TotalCapacityInReserveMargin(COUNTRY,YEAR);
+positive variable DemandNeedingReserveMargin(COUNTRY,TIMESLICE,YEAR);
 *
 * ######## RE Gen Target #############
 *
-free variable TotalREProductionAnnual(REGION,YEAR);
-free variable RETotalProductionOfTargetFuelAnnual(REGION,YEAR);
+free variable TotalREProductionAnnual(COUNTRY,YEAR);
+free variable RETotalProductionOfTargetFuelAnnual(COUNTRY,YEAR);
 *
-free variable TotalTechnologyModelPeriodActivity(REGION,TECHNOLOGY);
+free variable TotalTechnologyModelPeriodActivity(COUNTRY,TECHNOLOGY);
 *
 * ######## Emissions #############
 *
-positive variable AnnualTechnologyEmissionByMode(REGION,TECHNOLOGY,EMISSION,MODE_OF_OPERATION,YEAR);
-positive variable AnnualTechnologyEmission(REGION,TECHNOLOGY,EMISSION,YEAR);
-positive variable AnnualTechnologyEmissionPenaltyByEmission(REGION,TECHNOLOGY,EMISSION,YEAR);
-positive variable AnnualTechnologyEmissionsPenalty(REGION,TECHNOLOGY,YEAR);
-positive variable DiscountedTechnologyEmissionsPenalty(REGION,TECHNOLOGY,YEAR);
-positive variable AnnualEmissions(REGION,EMISSION,YEAR);
-positive variable ModelPeriodEmissions(EMISSION,REGION);
-
-
+positive variable AnnualTechnologyEmissionByMode(COUNTRY,TECHNOLOGY,EMISSION,MODE_OF_OPERATION,YEAR);
+positive variable AnnualTechnologyEmission(COUNTRY,TECHNOLOGY,EMISSION,YEAR);
+positive variable AnnualTechnologyEmissionPenaltyByEmission(COUNTRY,TECHNOLOGY,EMISSION,YEAR);
+positive variable AnnualTechnologyEmissionsPenalty(COUNTRY,TECHNOLOGY,YEAR);
+positive variable DiscountedTechnologyEmissionsPenalty(COUNTRY,TECHNOLOGY,YEAR);
+positive variable AnnualEmissions(COUNTRY,EMISSION,YEAR);
+positive variable ModelPeriodEmissions(EMISSION,COUNTRY);

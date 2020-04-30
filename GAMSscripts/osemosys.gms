@@ -6,7 +6,7 @@
 * Files required are:
 * osemosys.gms (this file)
 * osemosys_dec.gms
-* utopia_data.gms
+* Italy_data.gms
 * osemosys_equ.gms
 *
 * To run this GAMS version of OSeMOSYS on your PC:
@@ -27,9 +27,9 @@ $setglobal scen base
 $offlisting
 $include osemosys_dec.gms
 * specify Utopia Model data
-$include utopia_data.gms
+$include Italy_data.gms
 * define model equations
-
+$stop
 $include osemosys_equ.gms
 $onlisting
 * solve the model
