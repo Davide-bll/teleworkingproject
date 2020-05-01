@@ -27,7 +27,7 @@ s3list <- map(s3names, ~read_osemosys(paste(path, .x, sep = "/"))) %>%
 s3list <- map(s3list, convert_struct3)
 s3list <- map(s3list, ~mutate_at(., vars('2060'), as.numeric))
 
-# convert to std mode
+# convert to std mode_of_operation
 s3list <- map(s3list , ~convert_tb(., col = "technology", 
                           into = c("country", "fuel", "technology", "altro"), 
                           sep = c(2,4,6)))
@@ -39,10 +39,10 @@ actions <- list(mean,
                 )
 
 grps <- list(
-  c("country", "technology", "fuel", "mode", "year"),
-  c("country", "technology", "fuel", "mode", "year"),
-  c("country", "technology", "fuel", "mode", "year"),
-  c("country", "technology", "fuel", "mode", "year")
+  c("country", "technology", "fuel", "mode_of_operation", "year"),
+  c("country", "technology", "fuel", "mode_of_operation", "year"),
+  c("country", "technology", "fuel", "mode_of_operation", "year"),
+  c("country", "technology", "fuel", "mode_of_operation", "year")
 )
 
 # arguments
@@ -56,9 +56,9 @@ s3list <- pmap(args, my_group_by)
 # add emission in emissionactivityratio
 s3list$EmissionActivityRatio <- s3list$EmissionActivityRatio %>% 
   mutate(emission = "CO2") %>% 
-  select(country, emission, technology, fuel, mode, year, value)
+  select(country, emission, technology, fuel, mode_of_operation, year, value)
 
 # # write csv
-# imap(s3list, ~write.csv(.x, 
-#                         paste("C:/Users/Utente/Desktop/gamsathome/data/params_gams/", paste0(.y, ".csv"),  sep = "/"), 
-#               row.names = FALSE))
+ # imap(s3list, ~write.csv(.x, 
+ #                         paste("C:/Users/Utente/Desktop/gamsathome/data/params_gams/", paste0(.y, ".csv"),  sep = "/"), 
+ #               row.names = FALSE))
