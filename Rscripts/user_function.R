@@ -91,7 +91,7 @@ convert_struct3 <- function(x) {
   mode <- x %>% select(technology) %>% 
     mutate(mode = 1) %>% 
     group_by(technology) %>% 
-    mutate(mode = as.character(cumsum(mode))) %>% 
+    mutate(mode_of_operation = as.character(cumsum(mode))) %>% 
     ungroup
   
   x %>% left_join(mode, by = "technology")

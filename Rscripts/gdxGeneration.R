@@ -85,7 +85,14 @@ list_param[predicates] <- map2(.x = list_param[predicates], .y = duplicate_fuel,
                       sep = "", 
                       remove = .y))
 
+names(list_param)[[2]] <- "availabilityfactor"
+#### change order of columns (this is done to preserv the equations strcture in gams) ------
 
+list_param$EmissionActivityRatio <- list_param$EmissionActivityRatio %>% 
+  #arrange
+  select(country, emission, technology, mode_of_operation, year, value)
+
+ 
 # write gdx
 # write.gdx("C:/Users/Utente/Desktop/gamsathome/gamsscript/params",
-#          params = list_param)
+# params = list_param)
