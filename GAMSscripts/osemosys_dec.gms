@@ -49,7 +49,7 @@ alias (s,STORAGE);
 *
 * ####### Global #############
 *
-parameter YearSplit(SEASON, BRACKET,YEAR);
+parameter YearSplit(TIMESLICE,YEAR);
 parameter DiscountRate(COUNTRY);
 parameter DaySplit(YEAR,BRACKET);
 parameter Conversionls(TIMESLICE,SEASON);
@@ -126,10 +126,10 @@ parameter REMinProductionTarget(COUNTRY,YEAR);
 *
 * ######### Emissions & Penalties #############
 *check what we have
-parameter EmissionActivityRatio(COUNTRY,TECHNOLOGY,EMISSION,MODE_OF_OPERATION,YEAR);
+parameter EmissionActivityRatio(COUNTRY,EMISSION,TECHNOLOGY,MODE_OF_OPERATION,YEAR);
 parameter EmissionsPenalty(COUNTRY,EMISSION,YEAR);
 parameter AnnualExogenousEmission(COUNTRY,EMISSION,YEAR);
-parameter AnnualEmissionLimit(COUNTRY,EMISSION,YEAR);
+parameter AnnualEmissionLimit(COUNTRY,EMISSION,FUEL,YEAR);
 *emission unit of measurement!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! EMISSION O FUEL? probably (COUNTRY,EMISSION,fuel,YEAR);
 parameter ModelPeriodExogenousEmission(COUNTRY,EMISSION);
 parameter ModelPeriodEmissionLimit(COUNTRY,EMISSION);
@@ -214,7 +214,7 @@ positive variable VariableOperatingCost(COUNTRY,TIMESLICE,TECHNOLOGY,YEAR);
 positive variable TotalDiscountedCostByTechnology(COUNTRY,TECHNOLOGY,YEAR);
 positive variable TotalDiscountedCost(COUNTRY,YEAR);
 *
-positive variable ModelPeriodCostByRegion(COUNTRY);
+positive variable ModelPeriodCostbyCOUNTRY(COUNTRY);
 *
 * ######## Reserve Margin #############
 *

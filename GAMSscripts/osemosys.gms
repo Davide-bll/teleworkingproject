@@ -27,10 +27,13 @@ $setglobal scen base
 $offlisting
 $include osemosys_dec.gms
 * specify Utopia Model data
+
 $include Italy_data.gms
+
 * define model equations
-$stop
+
 $include osemosys_equ.gms
+
 $onlisting
 * solve the model
 model osemosys /all/;

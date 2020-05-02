@@ -23,8 +23,6 @@ $offlisting
 *------------------------------------------------------------------------	
 * Sets       
 *------------------------------------------------------------------------
-
-
 $offlisting
 set YEAR    / 2015*2060 /;
 set technology       / HPBF,CCBM,CHBM,CSBM,STBM,CHCO,CSCO,STCO,CVGO,CCHF,CHHF,GCHF,HPHF,STHF,DMHY,
@@ -48,11 +46,11 @@ set STORAGE / DAM /;
 *------------------------------------------------------------------------
 
 $gdxin params.gdx
-$load annualemissionlimit availabilityfactor  CapitalCost EmissionActivityRatio FixedCost InputActivityRatio OutputActivityRatio residualcapacity
-$load SpecifiedAnnualDemand TotalAnnualMaxCapacity capacityfactor
+$load annualemissionlimit availabilityfactor CapitalCost EmissionActivityRatio FixedCost InputActivityRatio OutputActivityRatio residualcapacity
+$load SpecifiedAnnualDemand TotalAnnualMaxCapacity CapacityFactor  SpecifiedDemandProfile YearSplit
 $load TotalAnnualMaxCapacityInvestment TotalAnnualMinCapacity TotalTechnologyAnnualActivityLowerLimit TotalTechnologyAnnualActivityUpperLimit VariableCost
 $gdxin
-* manca availabilityfactor perchè bho!!!!
+
 
 parameter Conversionls(l,ls) /
 S01B1.S01 1
@@ -70,9 +68,7 @@ S04B3.S04 1
 S05B1.S05 1
 S05B2.S05 1
 S05B3.S05 1
- 
-
-            /;
+ /;
 
 parameter Conversionld(l,ld) /
 S01B1.1 1
@@ -111,19 +107,11 @@ S05B3.B3  1
 /;
 
 
-
-
 DiscountRate(r) = 0.05;
-
 DaySplit(y,lh) = 8/(24*365);
-
-
-
 DaysInDayType(y,ls,ld) = 7;
 *per ora!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 TradeRoute(r,rr,f,y) = 0;
-
 DepreciationMethod(r) = 1;
 *check that!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111
 
@@ -131,24 +119,80 @@ DepreciationMethod(r) = 1;
 * Parameters - Demands       
 *------------------------------------------------------------------------
 
-
-
+AccumulatedAnnualDemand(r,f,y) = 0;
+SpecifiedAnnualDemand(r,f,y)$(SpecifiedAnnualDemand(r,f,y) = 0) = 0;
+SpecifiedDemandProfile(r,f,l,y)$(SpecifiedDemandProfile(r,f,l,y) = 0) = 0;
 *------------------------------------------------------------------------	
 * Parameters - Performance       
 *------------------------------------------------------------------------
-*ADD values!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-CapacityToActivityUnit(r,t)=1;
+parameter CapacityToActivityUnit(r,t) /
 
+IT.CHBM 31.536
+IT.CSBM 31.536
+IT.STBM 31.536
+IT.CSCO 31.536
+IT.STCO 31.536
+IT.SIEL 31.536
+IT.CHHF 31.536
+IT.GCHF 31.536
+IT.HPHF 31.536
+IT.STHF 31.536
+IT.DMHY 31.536
+IT.DSHY 31.536
+IT.CHNG 31.536
+IT.CSNG 31.536
+IT.FCNG 31.536
+IT.GCNG 31.536
+IT.HPNG 31.536
+IT.STNG 31.536
+IT.WVOC 31.536
+IT.UTSO 31.536
+IT.OFWI 31.536
+IT.ONWI 31.536
+IT.STWS 31.536
+
+
+/;
+CapacityToActivityUnit(r,t)$(CapacityToActivityUnit(r,t) = 0) = 1;
 
 CapacityFactor(r,t,l,y)$(CapacityFactor(r,t,l,y)=0)   = 1;
 
 *the dependence on l (TIMESLICE) might be useful for instance solar PV have a 0 capacity factor during night
 
-AvailabilityFactor(r,t,y) = 1;
+AvailabilityFactor(r,t,y)$(AvailabilityFactor(r,t,y) = 0) = 1;
 *no l dependence is yearly planned outage
 
+ResidualCapacity(r,t,y)$(ResidualCapacity(r,t,y) = 0) = 0;
 
-OperationalLife(r,t)=1;
+parameter OperationalLife(r,t) /
+
+IT.CHBM	30
+IT.CSBM	25
+IT.STBM	35
+IT.CSCO	25
+IT.STCO	35
+IT.CHHF	30
+IT.GCHF	25
+IT.HPHF	22.5
+IT.STHF	25
+IT.DMHY	80
+IT.DSHY	80
+IT.CHNG	27.5
+IT.CSNG	25
+IT.FCNG	30
+IT.GCNG	15
+IT.HPNG	27.5
+IT.STNG	20
+IT.WVOC	30
+IT.UTSO	25
+IT.OFWI	25
+IT.ONWI	25
+IT.STWS	25
+
+/;
+
+OperationalLife(r,t)$(OperationalLife(r,t) = 0) = 1;
+
 
 *------------------------------------------------------------------------	
 * Parameters - Technology costs       
@@ -159,7 +203,9 @@ VariableCost(r,t,m,y)$(VariableCost(r,t,m,y)=0)   = 1e-5;
 *variable cost per unity of activity (for instance for power plants activity is electricity)
 *99999 to say that the cost of unmet demand is crazy high so pleas meet the demand
 
+CapitalCost(r,t,y)$(CapitalCost(r,t,y) = 0) = 0.0001;
 
+FixedCost(r,t,y)$(FixedCost(r,t,y) = 0) = 0;
 
 *------------------------------------------------------------------------	
 * Parameters - Storage       
@@ -167,15 +213,9 @@ VariableCost(r,t,m,y)$(VariableCost(r,t,m,y)=0)   = 1e-5;
 
 
 *we need to define the set of storages first
-$ontext
-parameter TechnologyToStorage(r,m,t,s) /
-  UTOPIA.2.E51.DAM  1
-/;
 
-parameter TechnologyFromStorage(r,m,t,s) /
-  UTOPIA.1.E51.DAM  1
-/;
-
+TechnologyToStorage(r,m,t,s)  = 0;
+TechnologyFromStorage(r,m,t,s) = 0;
 
 
 StorageLevelStart(r,s) = 999;
@@ -192,7 +232,8 @@ CapitalCostStorage(r,s,y) = 0;
 
 ResidualStorageCapacity(r,s,y) = 999;
 
-$offtext
+InputActivityRatio(r,t,f,m,y)$(InputActivityRatio(r,t,f,m,y) = 0) = 0;
+OutputActivityRatio(r,t,f,m,y)$(OutputActivityRatio(r,t,f,m,y) = 0) = 0;
 
 *------------------------------------------------------------------------	
 * Parameters - Capacity and investment constraints       
@@ -225,36 +266,33 @@ TotalTechnologyModelPeriodActivityLowerLimit(r,t) = 0;
 * Parameters - Reserve margin
 *-----------------------------------------------------------------------
 
-
 ReserveMargin(r,y)=1.2;
-
+ReserveMarginTagFuel(r,f,y) = 0;
+ReserveMarginTagTechnology(r,t,y) = 0;
 
 *------------------------------------------------------------------------	
 * Parameters - RE Generation Target       
 *------------------------------------------------------------------------
 
 RETagTechnology(r,t,y) = 0;
-
 RETagFuel(r,f,y) = 0;
-
-
 REMinProductionTarget(r,y) = 0;
-
 
 *------------------------------------------------------------------------	
 * Parameters - Emissions       
 *------------------------------------------------------------------------
 
+
 EmissionsPenalty(r,e,y) = 0;
 
 AnnualExogenousEmission(r,e,y) = 0;
 
-AnnualEmissionLimit(r,e,y) = 9999;
+AnnualEmissionLimit(r,e,f,y) = 9999;
 
 ModelPeriodExogenousEmission(r,e) = 0;
 
-ModelPeriodEmissionLimit(r,e) = 9999;
+ModelPeriodEmissionLimit(r,e) = 9999999;
 *cumulated amount like CARBON BUDGET
 *we are fixing the integral of emissions
 
-
+EmissionActivityRatio(r,e,t,m,y)$(EmissionActivityRatio(r,e,t,m,y) = 0) = 0;

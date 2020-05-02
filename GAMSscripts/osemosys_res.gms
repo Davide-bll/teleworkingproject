@@ -12,7 +12,7 @@ put / "ModelPeriodEmissions",r.TL,e.TL,ModelPeriodEmissions.L(e,r);
 put /;
 * Total cost (by region)
 loop(r,
-put / "ModelPeriodCostByRegion",r.TL,ModelPeriodCostByRegion.L(r);
+put / "ModelPeriodCostbyCOUNTRY",r.TL,ModelPeriodCostbyCOUNTRY.L(r);
 );
 put /;
 * Accumulated Annual Demand (by region, fuel, timeslice, year)
@@ -82,7 +82,7 @@ loop(y, put AnnualEmissions.L(r,e,y));
 );
 put /;
 * Annual Emissions (by region, technology, emission, year)
-loop((r,t,e)$(sum((y,m), EmissionActivityRatio(r,t,e,m,y)) > 0),
+loop((r,t,e)$(sum((y,m), EmissionActivityRatio(r,e,t,m,y)) > 0),
 put / "AnnualEmissionsByTechnology",r.TL,t.TL,e.TL;
 loop(y, put AnnualTechnologyEmission.L(r,t,e,y));
 );
