@@ -92,6 +92,10 @@ list_param$EmissionActivityRatio <- list_param$EmissionActivityRatio %>%
   #arrange
   select(country, emission, technology, mode_of_operation, year, value)
 
+# add emission column
+list_param$annualemissionlimit <- list_param$annualemissionlimit %>% 
+  mutate(emission = "CO2") %>% 
+  select(country, emission, fuel, year, value)
  
 # write gdx
 # write.gdx("C:/Users/Utente/Desktop/gamsathome/gamsscript/params",
