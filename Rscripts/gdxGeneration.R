@@ -46,30 +46,30 @@ list_param <- map(list_param, rename_commodity)
 # this could have been avoided using row.names = FALSE in write.csv
 list_param <- list_param %>% map(~.[which(!(str_detect(names(.), "X")))])
 
+map(list_param, ~select(., -value) %>% 
+      group_by_all(.) %>% count() %>% filter(n>1)) %>% 
+  map_dbl(nrow) %>% sum()
+
+# fix "00" -------
+# check duplicates: if EVERY thing is right, this sum is zero
+
+# subset tibbls containing fuel, and change "HO" in "HY"
+predicates <- map_lgl(list_param, function(x) "fuel" %in% names(x))
+list_param[predicates] <- map(list_param[predicates], ~mutate(., fuel = change_code(fuel)))
+
+#drop raws with "00" in technology
+predicates <- map_lgl(list_param, function(x) "technology" %in% names(x))
+
+list_param[predicates] <- list_param[predicates] %>% 
+  map(~filter(., !(technology == "0" |technology == "00")))
 
 # remove 0 rows df
 param <- map(list_param, nrow) %>%
   map_df(as_tibble,.id = "param") %>% 
   filter(value > 0) %>% 
   pull(param)
-  
+
 list_param <- list_param[param]
-
-# fix "00" in totalactivitylowerlimit
-# check duplicates: if EVERY thing is right, this sum is zero
-map(list_param, ~select(., -value) %>% 
-      group_by_all(.) %>% count() %>% filter(n>1)) %>% 
-  map_dbl(nrow) %>% sum()
-
-# subset tibbls containing fuel, and change col
-predicates <- map_lgl(list_param, function(x) "fuel" %in% names(x))
-list_param[predicates] <- map(list_param[predicates], ~mutate(., fuel = change_code(fuel)))
-
-# subset tibble containnig technology, and change "0" in "00"
-predicates <- map_lgl(list_param, function(x) "technology" %in% names(x))
-
-list_param[predicates] <- map(list_param[predicates], 
-                              ~mutate(., technology = change_code(as.character(technology), old = "0", new = "00")))
 
 # OPTION2----
 # aggregate fuel and technology, and "duplicate the fuel col when is necessary"
@@ -97,6 +97,7 @@ list_param$annualemissionlimit <- list_param$annualemissionlimit %>%
   mutate(emission = "CO2") %>% 
   select(country, emission, fuel, year, value)
  
+
 # write gdx
-# write.gdx("C:/Users/Utente/Desktop/gamsathome/gamsscript/params",
-# params = list_param)
+write.gdx("C:/Users/Utente/Desktop/gamsathome/gamsscript/params",
+params = list_param)
