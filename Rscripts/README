@@ -1,6 +1,6 @@
 this folder contains the R scripts used for the TELEWORKING project
 
-###### 1) EXTRACT DATA from OSEMBE model #########
+###### 1) EXTRACT DATA from OSEMBE model dataset #########
 We identified 4 different types of structure in the Data. Each Structure has been trated different.
 The Osembe model has a different structure, so we adapted those data in order to obtain the input Parameters "Like in Utopia Data".
 
@@ -16,6 +16,7 @@ that rule.
 1.2 REAGGREGATION into FUEL - TECHNOLOGY
 "dataaggregation.R" script.
 
+
 ##STRUCTURE2##
 timeslice dependent parameters.
 After common evaluation of the problem, we decided to maintain the Osembe timeslice strategy: 5 season, 3 day-brackets.
@@ -25,18 +26,17 @@ After common evaluation of the problem, we decided to maintain the Osembe timesl
 "capacityfactor.R" script
 
 ##STRUCTURE3##
-Similar t structure1, just more sh---y
+Similar to structure1
 str3.R script
 ##STRUCTURE4##
 writed manually in GAMS.
-TODOS (Natalia has the file)
-
 
 NOTES: In case we decide to use the 3-season 3 day-brackets strategy, the mapping between the 2 different dimension spaces has been created.
 and now it makes sense. (every column sum to 1) 
 it's in the "userfunctions.R" script, the function is "fromOSEtoGAMS", which basically find a linear mapping between 
 two vector that sums to 1, so that every component of the input is totally used, never under/over-used.
-recap
-TODOS:
--remember there also Structure 4
--specify the Default values directly in GAMS!
+
+2) GDX parameters creation.
+"gdx_generation.R" creates the gdx parameters fie which contains structure 1-2-3 data. It uses gdxtools library.
+Some modifications are also done in order to adapt the data to the "Utopia strategy" code. 
+NB TECHNOLOGY is 4 letters tag now.
