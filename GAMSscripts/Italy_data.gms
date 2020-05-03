@@ -27,7 +27,7 @@ $offlisting
 set YEAR    / 2015*2060 /;
 set technology       / HPBF,CCBM,CHBM,CSBM,STBM,CHCO,CSCO,STCO,CVGO,CCHF,CHHF,GCHF,HPHF,STHF,DMHY,
                        DSHY,CCNG,CHNG,CSNG,FCNG,GCNG,HPNG,STNG,WVOC,CHWS,STWS,SODI,SOUT,WIOF,WION,
-                       DISO,UTSO,OFWI,ONWI,00CO,00HF,00NG,00OI,00EL,MTEL,RFOI,SIEL,00BF,00BM,00GO,00WS
+                       DISO,UTSO,OFWI,ONWI,00HF,MTEL,RFOI,SIEL
                        /;
                        
 set TIMESLICE       /  S01B1,S01B2,S01B3,S02B1,S02B2,S02B3,S03B1,S03B2,S03B3,S04B1,S04B2,S04B3,S05B1,S05B2,S05B3 /;
@@ -48,7 +48,7 @@ set STORAGE / DAM /;
 $gdxin params.gdx
 $load annualemissionlimit availabilityfactor CapitalCost EmissionActivityRatio FixedCost InputActivityRatio OutputActivityRatio residualcapacity
 $load SpecifiedAnnualDemand TotalAnnualMaxCapacity CapacityFactor  SpecifiedDemandProfile YearSplit
-$load TotalAnnualMaxCapacityInvestment TotalAnnualMinCapacity TotalTechnologyAnnualActivityLowerLimit TotalTechnologyAnnualActivityUpperLimit VariableCost
+$load TotalAnnualMaxCapacityInvestment TotalAnnualMinCapacity TotalTechnologyAnnualActivityUpperLimit VariableCost
 $gdxin
 
 
@@ -255,7 +255,7 @@ TotalAnnualMinCapacityInvestment(r,t,y)=0;
 
 TotalTechnologyAnnualActivityUpperLimit(r,t,y)$(TotalTechnologyAnnualActivityUpperLimit(r,t,y)=0)   = 999999;
 
-TotalTechnologyAnnualActivityLowerLimit(r,t,y)$(TotalTechnologyAnnualActivityLowerLimit(r,t,y)=0)   = 0;
+TotalTechnologyAnnualActivityLowerLimit(r,t,y) = 0;
 
 TotalTechnologyModelPeriodActivityUpperLimit(r,t) = 999999;
 
