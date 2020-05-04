@@ -35,7 +35,7 @@ paramlist <- list.files(path = path, pattern = ".csv")
 
 # readdata
 list_param <- map(paramlist, ~read.csv(file = paste(path, ., sep = "/"),
-                         header = TRUE, stringsAsFactors = FALSE) %>% 
+                                       header = TRUE, stringsAsFactors = FALSE) %>% 
                     as_tibble) %>% 
   setNames(nm = str_remove(paramlist, ".csv")) 
 
@@ -60,6 +60,7 @@ list_param[predicates] <- map(list_param[predicates], ~mutate(., fuel = change_c
 #drop raws with "00" in technology
 predicates <- map_lgl(list_param, function(x) "technology" %in% names(x))
 
+# remove 0 or 00 from technology
 list_param[predicates] <- list_param[predicates] %>% 
   map(~filter(., !(technology == "0" |technology == "00")))
 
@@ -72,13 +73,14 @@ param <- map(list_param, nrow) %>%
 list_param <- list_param[param]
 
 # OPTION2----
-# aggregate fuel and technology, and "duplicate the fuel col when is necessary"
-duplicates_fuel <- c("InputActivityRatio", "OutputActivityRatio")
+# aggregate fuel and technology, and "duplicate the fuel col when is necessary, and fix manually the values"
+duplicates_fuel <- c("InputActivityRatio")
 
 predicates <- list_param %>% 
   map_lgl(., ~(any(str_detect(names(.), "fuel")) & any(str_detect(names(.), "technology"))))
 
-duplicate_fuel <- !names(list_param)[predicates] %in% duplicates_fuel
+predicates <- setdiff(names(list_param)[predicates], "OutputActivityRatio")
+duplicate_fuel <- !(predicates %in% duplicates_fuel)
 
 list_param[predicates] <- map2(.x = list_param[predicates], .y = duplicate_fuel,
                ~unite(.x, "technology", c("technology", "fuel"), 
@@ -86,6 +88,14 @@ list_param[predicates] <- map2(.x = list_param[predicates], .y = duplicate_fuel,
                       remove = .y))
 
 names(list_param)[[2]] <- "availabilityfactor"
+
+# fix input activity ratio fuel column
+# EL -> E1
+list_param$InputActivityRatio <- list_param$InputActivityRatio %>%
+mutate(fuel = ifelse(endsWith(technology, "EL") & fuel == "EL", "E1", fuel)) 
+  
+
+
 #### change order of columns (this is done to preserv the equations strcture in gams) ------
 
 list_param$EmissionActivityRatio <- list_param$EmissionActivityRatio %>% 
@@ -98,6 +108,22 @@ list_param$annualemissionlimit <- list_param$annualemissionlimit %>%
   select(country, emission, fuel, year, value)
  
 
+# exclude NA technologies (by combination)
+techs_na<- readRDS("C:/Users/Utente/Desktop/gamsathome/data/Techs_na.R") %>% 
+  pull(code)
+
+#drop raws with "00" in technology
+predicates <- map_lgl(list_param, function(x) "technology" %in% names(x))
+
+# remove 0 or 00 from technology
+list_param[predicates] <- list_param[predicates] %>% 
+  map(~filter(., !(technology %in% techs_na)))
+
+# write R files in dataexploration App folder
+saveRDS(list_param,"C:/Users/Utente/Desktop/shiny_modules/DataExploration_2/data/list_param.R")
 # write gdx
 write.gdx("C:/Users/Utente/Desktop/gamsathome/gamsscript/params",
 params = list_param)
+# write gdx
+write.csv(techs_na, file = "C:/Users/Utente/Desktop/gamsathome/data/techs_na.csv", 
+          row.names = FALSE)
