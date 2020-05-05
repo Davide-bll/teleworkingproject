@@ -27,7 +27,7 @@ $offlisting
 set YEAR    / 2015*2060 /;
 set technology       / HPBF,CCBM,CHBM,CSBM,STBM,CHCO,CSCO,STCO,CVGO,CCHF,CHHF,GCHF,HPHF,STHF,DMHY,
                        DSHY,CCNG,CHNG,CSNG,FCNG,GCNG,HPNG,STNG,WVOC,CHWS,STWS,SODI,SOUT,WIOF,WION,
-                       DISO,UTSO,OFWI,ONWI,00HF,MTEL,RFOI,SIEL
+                       DISO,UTSO,OFWI,ONWI,RFOI
                        /;
                        
 set TIMESLICE       /  S01B1,S01B2,S01B3,S02B1,S02B2,S02B3,S03B1,S03B2,S03B3,S04B1,S04B2,S04B3,S05B1,S05B2,S05B3 /;
@@ -47,7 +47,7 @@ set STORAGE / DAM /;
 
 $gdxin params.gdx
 $load annualemissionlimit availabilityfactor CapitalCost EmissionActivityRatio FixedCost InputActivityRatio OutputActivityRatio residualcapacity
-$load SpecifiedAnnualDemand TotalAnnualMaxCapacity CapacityFactor  SpecifiedDemandProfile YearSplit
+$load SpecifiedAnnualDemand TotalAnnualMaxCapacity SpecifiedDemandProfile YearSplit
 $load TotalAnnualMaxCapacityInvestment TotalAnnualMinCapacity TotalTechnologyAnnualActivityUpperLimit VariableCost
 $gdxin
 
@@ -132,7 +132,6 @@ IT.CSBM 31.536
 IT.STBM 31.536
 IT.CSCO 31.536
 IT.STCO 31.536
-IT.SIEL 31.536
 IT.CHHF 31.536
 IT.GCHF 31.536
 IT.HPHF 31.536
@@ -155,7 +154,7 @@ IT.STWS 31.536
 /;
 CapacityToActivityUnit(r,t)$(CapacityToActivityUnit(r,t) = 0) = 1;
 
-CapacityFactor(r,t,l,y)$(CapacityFactor(r,t,l,y)=0)   = 1;
+CapacityFactor(r,t,l,y) = 1;
 
 *the dependence on l (TIMESLICE) might be useful for instance solar PV have a 0 capacity factor during night
 
